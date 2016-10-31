@@ -3,7 +3,10 @@ import traceback
 from django.http import Http404, HttpResponse
 from django.template import Context, loader
 from django.utils import timezone
-from django.utils.simplejson import JSONEncoder
+try:
+    from django.utils.simplejson import JSONEncoder
+except ImportError:
+    from json import JSONEncoder
 from django.utils.translation import ungettext
 from django.views.decorators.cache import never_cache
 from activeusers.models import Visitor
