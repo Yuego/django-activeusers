@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from compat import patterns, url
 from django.conf import settings
 from activeusers import views
 
