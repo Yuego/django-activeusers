@@ -47,4 +47,3 @@ def visitors_on_page(parser, token):
 
     return VisitorsOnSite(varname, same_page=True)
 register.tag(visitors_on_page)
-
