@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 
-VERSION = (0, 1, 3)
+from . import checks
 
-def get_version():
-    "Returns the version as a human-format string."
-    return '.'.join([str(i) for i in VERSION])
+__version__ = '0.1.3'
 
+default_app_config = 'activeusers.apps.Config'

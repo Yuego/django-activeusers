@@ -1,39 +1,44 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
-import sys, os
+import os
+import sys
+
 import activeusers
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
+version = activeusers.__version__
+
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    print("You probably want to also tag the version now:")
+    print("  git tag -a %s -m 'version %s'" % (version, version))
+    print("  git push --tags")
+    sys.exit()
+
+readme = open('README.md').read()
+history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+classifiers = [c for c in open('classifiers').read().splitlines() if '#' not in c]
 
 setup(
     name='django-activeusers',
-    version=activeusers.get_version(),
-    description="Just active-visitor tracking for Django",
-    long_description=open('README.rst', 'r').read(),
-    keywords='django, active, visitors, users, tracking',
-    author='Alvin Savoy',
-    author_email='none',
-    url='http://github.com/asavoy/django-activeusers',
-    license='MIT',
-    package_dir={'activeusers': 'activeusers'},
+    version=version,
+    description="""Your project description goes here""",
+    long_description=readme + '\n\n' + history,
+    author='arteria GmbH,Alvin Savoy',
+    author_email='admin@arteria.ch',
+    url='https://github.com/arteria/django-activeusers-tmp',
+    packages=[
+        'activeusers',
+    ],
     include_package_data=True,
-    packages=find_packages(),
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Environment :: Web Environment",
-        "Framework :: Django",
-        "Intended Audience :: Developers",
-        "Intended Audience :: Information Technology",
-        "Intended Audience :: System Administrators",
-        "License :: OSI Approved :: MIT License",
-        "Natural Language :: English",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Topic :: Internet :: Log Analysis",
-        "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Page Counters",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware",
-        "Topic :: Security",
-        "Topic :: System :: Monitoring",
-        "Topic :: Utilities",
-    ]
+    install_requires=open('requirements.txt').read().splitlines(),
+    license="MIT",
+    zip_safe=False,
+    keywords='django-activeusers-tmp',
+    classifiers=classifiers,
 )

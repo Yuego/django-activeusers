@@ -1,4 +1,11 @@
-include README.rst LICENSE AUTHORS CHANGES
-recursive-include activeusers *.*
-recursive-exclude activeusers .*.swp *.pyc
-recursive-exclude demo *.*
+include AUTHORS.rst
+include CONTRIBUTING.rst
+include HISTORY.rst
+include LICENSE
+include README.md
+include requirements.txt
+include classifiers
+recursive-include activeusers *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
+recursive-include activeusers/static *
+recursive-include activeusers/templates *
+global-exclude *.orig *.pyc *.log *.swp
