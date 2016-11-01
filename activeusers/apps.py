@@ -8,4 +8,4 @@ else:
 
     class Config(AppConfig):
         name = 'activeusers'
-        verbose_name = ''
+        verbose_name = 'Active Users'
