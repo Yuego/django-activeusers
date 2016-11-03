@@ -8,4 +8,8 @@ else:
 
     class Config(AppConfig):
         name = 'activeusers'
-        verbose_name = 'Active Users'
+        try:
+            from . import __version__ as version_info
+        except:
+            version_info = 'n/a'
+        verbose_name = 'Active Users ('+version_info+')'
