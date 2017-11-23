@@ -8,7 +8,8 @@ from django.utils.timesince import timesince
 from activeusers import utils
 from activeusers.utils import string_with_title
 
-log = logging.getLogger('activeusers.models')
+logger = logging.getLogger('activeusers.models')
+
 
 class VisitorManager(models.Manager):
     def active(self, timeout=None):
@@ -46,7 +47,7 @@ class Visitor(models.Model):
         except AttributeError:
             pass
 
-        super(Visitor, self).save(*args, **kwargs) 
+        super(Visitor, self).save(*args, **kwargs)
 
     def _time_on_site(self):
         """
@@ -81,4 +82,3 @@ class Visitor(models.Model):
         unique_together = ('session_key', 'ip_address',)
         verbose_name = 'active visitor'
         verbose_name_plural = 'active visitors'
-

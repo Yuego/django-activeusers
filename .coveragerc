@@ -1,0 +1,3 @@
+[run]
+source = activeusers
+omit = activeusers/migrations/*

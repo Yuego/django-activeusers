@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import timedelta
 import logging
 import re
@@ -6,15 +7,22 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.db.utils import IntegrityError
+
 from activeusers import utils
 from activeusers.models import Visitor
+
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    class MiddlewareMixin(object):
+        pass
 
 
 title_re = re.compile('<title>(.*?)</title>')
 log = logging.getLogger('activeusers.middleware')
 
 
-class VisitorTrackingMiddleware:
+class VisitorTrackingMiddleware(MiddlewareMixin):
     """
     Keeps track of your active users.  Anytime a visitor accesses a valid URL,
     their unique record will be updated with the page they're on and the last

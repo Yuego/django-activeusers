@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 from activeusers.models import Visitor
+
 
 class VisitorAdmin(admin.ModelAdmin):
     model = Visitor

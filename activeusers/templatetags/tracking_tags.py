@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import template
 from activeusers.models import Visitor
 
@@ -24,6 +25,7 @@ class VisitorsOnSite(template.Node):
         context[self.varname] = count
         return ''
 
+
 def visitors_on_site(parser, token):
     """
     Determines the number of active users on your site and puts it into the context
@@ -34,7 +36,7 @@ def visitors_on_site(parser, token):
         raise template.TemplateSyntaxError('visitors_on_site usage: {% visitors_on_site as visitors %}')
 
     return VisitorsOnSite(varname)
-register.tag(visitors_on_site)
+
 
 def visitors_on_page(parser, token):
     """
@@ -46,4 +48,7 @@ def visitors_on_page(parser, token):
         raise template.TemplateSyntaxError('visitors_on_page usage: {% visitors_on_page as visitors %}')
 
     return VisitorsOnSite(varname, same_page=True)
+
+
+register.tag(visitors_on_site)
 register.tag(visitors_on_page)
