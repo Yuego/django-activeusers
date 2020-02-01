@@ -3,6 +3,7 @@ import traceback
 from django.http import Http404, HttpResponse
 from django.template import Context, loader
 from django.utils import timezone
+
 try:
     from django.utils.simplejson import JSONEncoder
 except ImportError:
@@ -11,7 +12,6 @@ from django.utils.translation import ungettext
 from django.views.decorators.cache import never_cache
 from activeusers.models import Visitor
 from activeusers.utils import u_clean as uc
-
 
 log = logging.getLogger('activeusers.views')
 
@@ -55,18 +55,19 @@ def get_active_users(request):
         # we don't put the session key or IP address here for security reasons
         try:
             data = {'users': [{
-                    'id': v.id,
-                    #'user': uc(v.user),
-                    'user_agent': uc(v.user_agent),
-                    'referrer': uc(v.referrer),
-                    'url': uc(v.url),
-                    'page_views': v.page_views,
-                    'geoip': v.geoip_data_json,
-                    'last_update': (now - v.last_update).seconds,
-                    'friendly_time': ', '.join(friendly_time((now - v.last_update).seconds)),
-                } for v in active]}
+                'id': v.id,
+                # 'user': uc(v.user),
+                'user_agent': uc(v.user_agent),
+                'referrer': uc(v.referrer),
+                'url': uc(v.url),
+                'page_views': v.page_views,
+                'geoip': v.geoip_data_json,
+                'last_update': (now - v.last_update).seconds,
+                'friendly_time': ', '.join(friendly_time((now - v.last_update).seconds)),
+            } for v in active]}
         except:
-            log.error('There was a problem putting all of the visitor data together:\n%s\n\n%s' % (traceback.format_exc(), locals()))
+            log.error('There was a problem putting all of the visitor data together:\n%s\n\n%s' % (
+            traceback.format_exc(), locals()))
             return HttpResponse(content='{}', mimetype='text/javascript')
 
         response = HttpResponse(content=JSONEncoder().encode(data),
@@ -78,6 +79,7 @@ def get_active_users(request):
     # if the request was not made via AJAX, raise a 404
     raise Http404
 
+
 def friendly_time(last_update):
     minutes = last_update / 60
     seconds = last_update % 60
@@ -85,15 +87,15 @@ def friendly_time(last_update):
     friendly_time = []
     if minutes > 0:
         friendly_time.append(ungettext(
-                '%(minutes)i minute',
-                '%(minutes)i minutes',
-                minutes
-        ) % {'minutes': minutes })
+            '%(minutes)i minute',
+            '%(minutes)i minutes',
+            minutes
+        ) % {'minutes': minutes})
     if seconds > 0:
         friendly_time.append(ungettext(
-                '%(seconds)i second',
-                '%(seconds)i seconds',
-                seconds
-        ) % {'seconds': seconds })
+            '%(seconds)i second',
+            '%(seconds)i seconds',
+            seconds
+        ) % {'seconds': seconds})
 
     return friendly_time or 0

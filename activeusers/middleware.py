@@ -17,7 +17,6 @@ except ImportError:
     class MiddlewareMixin(object):
         pass
 
-
 title_re = re.compile('<title>(.*?)</title>')
 log = logging.getLogger('activeusers.middleware')
 

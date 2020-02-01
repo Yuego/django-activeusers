@@ -4,10 +4,12 @@ from activeusers.models import Visitor
 
 register = template.Library()
 
+
 class VisitorsOnSite(template.Node):
     """
     Injects the number of active users on your site as an integer into the context
     """
+
     def __init__(self, varname, same_page=False):
         self.varname = varname
         self.same_page = same_page
@@ -18,7 +20,10 @@ class VisitorsOnSite(template.Node):
                 request = context['request']
                 count = Visitor.objects.active().filter(url=request.path).count()
             except KeyError:
-                raise template.TemplateSyntaxError("Please add 'django.core.context_processors.request' to your TEMPLATE_CONTEXT_PROCESSORS if you want to see how many users are on the same page.")
+                raise template.TemplateSyntaxError(
+                    "Please add 'django.core.context_processors.request' to your TEMPLATE_CONTEXT_PROCESSORS "
+                    "if you want to see how many users are on the same page."
+                )
         else:
             count = Visitor.objects.active().count()
 

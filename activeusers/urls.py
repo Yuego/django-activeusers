@@ -2,6 +2,8 @@
 from django.conf.urls import url
 from activeusers import views
 
+app_name = 'activeusers'
+
 urlpatterns = [
     url(r'^refresh/$',
         views.update_active_users,

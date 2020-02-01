@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext
 from django.utils.timesince import timesince
 from activeusers import utils
-from activeusers.utils import string_with_title
+from activeusers.utils import StringWithTitle
 
 logger = logging.getLogger('activeusers.models')
 
@@ -25,10 +25,11 @@ class VisitorManager(models.Manager):
 
         return self.get_queryset().filter(last_update__gte=cutoff)
 
+
 class Visitor(models.Model):
     session_key = models.CharField(max_length=40)
     ip_address = models.CharField(max_length=20)
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     user_agent = models.CharField(max_length=255)
     referrer = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
@@ -65,6 +66,7 @@ class Visitor(models.Model):
             return u'%i:%02i:%02i' % (hours, minutes, seconds)
         else:
             return ugettext(u'unknown')
+
     time_on_site = property(_time_on_site)
 
     def _last_seen(self):
@@ -74,10 +76,11 @@ class Visitor(models.Model):
         """
 
         return ugettext(u'%s ago') % timesince(self.last_update)
+
     last_seen = property(_last_seen)
 
     class Meta:
-        app_label = string_with_title('activeusers', 'Active users')
+        app_label = StringWithTitle('activeusers', 'Active users')
         ordering = ('-last_update',)
         unique_together = ('session_key', 'ip_address',)
         verbose_name = 'active visitor'

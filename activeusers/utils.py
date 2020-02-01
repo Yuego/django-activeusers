@@ -5,6 +5,7 @@ import unicodedata
 # this is not intended to be an all-knowing IP address regex
 IP_RE = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
 
+
 def get_ip(request):
     """
     Retrieves the remote IP address from the request data.  If the user is
@@ -33,12 +34,14 @@ def get_ip(request):
 
     return ip_address
 
+
 def get_timeout():
     """
     Gets any specified timeout from the settings file, or use 10 minutes by
     default
     """
     return getattr(settings, 'ACTIVEUSERS_TIMEOUT', 10)
+
 
 def get_cleanup_timeout():
     """
@@ -47,29 +50,14 @@ def get_cleanup_timeout():
     """
     return getattr(settings, 'ACTIVEUSERS_CLEANUP_TIMEOUT', 24)
 
-def u_clean(s):
+
+def u_clean(s: str):
     """A strange attempt at cleaning up unicode"""
 
-    uni = ''
-    try:
-        # try this first
-        uni = str(s).decode('iso-8859-1')
-    except UnicodeDecodeError:
-        try:
-            # try utf-8 next
-            uni = str(s).decode('utf-8')
-        except UnicodeDecodeError:
-            # last resort method... one character at a time (ugh)
-            if s and type(s) in (str, unicode):
-                for c in s:
-                    try:
-                        uni += unicodedata.normalize('NFKC', unicode(c))
-                    except UnicodeDecodeError:
-                        uni += '-'
+    return s.encode('ascii', 'xmlcharrefreplace')
 
-    return uni.encode('ascii', 'xmlcharrefreplace')
 
-class string_with_title(str):
+class StringWithTitle(str):
     """
     Hack to achieve custom app labels in Django's admin.
     See http://ionelmc.wordpress.com/2011/06/24/custom-app-names-in-the-django-admin/
@@ -83,5 +71,8 @@ class string_with_title(str):
     def title(self):
         return self._title
 
-    __copy__ = lambda self: self
-    __deepcopy__ = lambda self, memodict: self
+    def __copy__(self):
+        return self
+
+    def __deepcopy__(self, memodict):
+        return self

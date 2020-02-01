@@ -16,16 +16,18 @@ else:
 
         log.debug('Updating untracked user agents cache')
         cache.set('_tracking_untracked_uas',
-            UntrackedUserAgent.objects.all(),
-            3600)
+                  UntrackedUserAgent.objects.all(),
+                  3600)
+
 
     def refresh_banned_ips(sender, instance, created=False, **kwargs):
         """Updates the cache of banned IP addresses"""
 
         log.debug('Updating banned IP cache')
         cache.set('_tracking_banned_ips',
-            [b.ip_address for b in BannedIP.objects.all()],
-            3600)
+                  [b.ip_address for b in BannedIP.objects.all()],
+                  3600)
+
 
     post_save.connect(refresh_untracked_user_agents, sender=UntrackedUserAgent)
     post_delete.connect(refresh_untracked_user_agents, sender=UntrackedUserAgent)
