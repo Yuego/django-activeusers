@@ -1,15 +1,15 @@
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.urls import re_path
 from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    (r'^activeusers/', include('activeusers.urls')),
-    (r'^admin/', include(admin.site.urls)),
-)
+urlpatterns = [
+    re_path(r'^activeusers/', 'activeusers.urls'),
+    re_path(r'^admin/', admin.site.urls),
+]
 
 if settings.DEBUG:
-    urlpatterns += patterns('django.views.static',
-        (r'static/(?P<path>.*)$', 'serve', {'document_root': settings.MEDIA_ROOT}),
-    )
+    urlpatterns += [
+        re_path(r'static/(?P<path>.*)$', 'serve', {'document_root': settings.MEDIA_ROOT}),
+    ]

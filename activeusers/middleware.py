@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import timedelta
 import logging
 import re
@@ -7,15 +6,10 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.db.utils import IntegrityError
+from django.utils.deprecation import MiddlewareMixin
 
 from activeusers import utils
 from activeusers.models import Visitor
-
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-    class MiddlewareMixin(object):
-        pass
 
 title_re = re.compile('<title>(.*?)</title>')
 log = logging.getLogger('activeusers.middleware')
@@ -131,7 +125,7 @@ class VisitorTrackingMiddleware(MiddlewareMixin):
             visitor.save(force_update=True)
 
 
-class VisitorCleanUpMiddleware:
+class VisitorCleanUpMiddleware(MiddlewareMixin):
     """Clean up old visitor tracking records in the database"""
 
     def process_request(self, request):
